@@ -7,9 +7,10 @@ var User = function(name, id){
     this.id = id;
 }
 
-var Team = function(users){
+var Team = function(users, color){
     this.users = users;
     this.score = 0;
+    this.color = color;
 }
 
 var Card = function(palo, number){

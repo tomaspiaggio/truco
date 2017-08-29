@@ -1,6 +1,8 @@
 var socket = io();
 var body = document.querySelector('body');
-var table = document.querySelector('.mod--table');
+var table = body.querySelector('.mod--table');
+var red = body.querySelector('.red');
+var blue = body.querySelector('.blue');
 var index = 0;
 
 socket.on('connection', function(){
@@ -59,22 +61,24 @@ function saveUser(name, id){
   */
 function renderTeams(teams){
     for(i = 0; i < teams[0].users.length; i++){
-        renderUser(teams[0].users[i]);
-        renderUser(teams[1].users[i]);
+        renderUser(teams[0].users[i], teams[0].color);
+        renderUser(teams[1].users[i], teams[1].color);
     }
 }
 
-function renderUser(user){
+function renderUser(user, color){
     // Creating elements
     var player = document.createElement("DIV");
     var name = document.createElement('DIV');
+    var media = document.createElement('DIV');
     var nameh1 = document.createElement('H1');
     var face = document.createElement('FIGURE');
     var img = document.createElement('IMG');
 
     // Setting child elements to parents
     img.setAttribute('src', 'http://img.thedailybeast.com/image/upload/v1494008886/articles/2017/04/03/the-internet-s-most-famous-pregnant-giraffe-still-hasn-t-given-birth/170403-jones-pregnant-giraffe-tease_alsbhr.jpg');
-    face.appendChild(img);
+    face.appendChild(media);
+    media.appendChild(img);
     player.appendChild(face);
     name.appendChild(nameh1);
     player.appendChild(name);
@@ -82,8 +86,10 @@ function renderUser(user){
     // Adding classes for css
     player.classList.add('mod__player');
     face.classList.add('player__face');
+    face.classList.add('player__face--' + color);
     nameh1.classList.add('player__name');
     name.classList.add('player__header');
+    media.classList.add('player__media');
 
     // Setting name
     nameh1.textContent = user.name;
@@ -108,8 +114,8 @@ function init(){
     var user6 = new User("Mati V", 6);
 
     var teams = [];
-    teams.push(new Team([user1, user3, user5]));
-    teams.push(new Team([user2, user4, user6]));
+    teams.push(new Team([user1, user3, user5], "red"));
+    teams.push(new Team([user2, user4, user6], "blue"));
 
     renderTeams(teams);
 
