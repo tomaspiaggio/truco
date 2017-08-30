@@ -30,31 +30,14 @@ module.exports = {
               });
             });
         });
+    },
+    getAllUsersFromGame: function(con, gameId, callback){
+        con.connect(function(err) {
+          if (err) throw err;
+          var sql = "INSERT INTO user (name) VALUES ('" + name + "')";
+          con.query(sql, function (err, result) {
+            callback(result.insertId);
+          });
+        });
     }
 };
-
-// function getLastRecord(name)
-// {
-//     return new Promise(function(resolve, reject) {
-//         // The Promise constructor should catch any errors thrown on
-//         // this tick. Alternately, try/catch and reject(err) on catch.
-//         var connection = getMySQL_connection();
-//
-//         var query_str =
-//         "SELECT name, " +
-//         "FROM records " +
-//         "WHERE (name = ?) " +
-//         "LIMIT 1 ";
-//
-//         var query_var = [name];
-//
-//         connection.query(query_str, query_var, function (err, rows, fields) {
-//             // Call reject on error states,
-//             // call resolve with results
-//             if (err) {
-//                 return reject(err);
-//             }
-//             resolve(rows);
-//         });
-//     });
-// }

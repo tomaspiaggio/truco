@@ -57,7 +57,9 @@ io.on('connection', function(socket){
 
     socket.on('my-message', function(message){
         var decomposed = decompose(message);
-        
+        database.getAllUsersFromGame(mysql.createConnection(databaseInfo), /*GAME ID*/, () => {
+            socket.emit('incoming-message', message); //emitir a todos el mensaje y ver lo de los rooms
+        });
     });
 
     // VER DE HACER LO DE LOS ROOMS QUE HICE EN EL CHAT DE SHOPIFY
