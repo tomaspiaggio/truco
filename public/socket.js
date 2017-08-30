@@ -44,12 +44,17 @@ function gameplay(){
   */
 function initialization(){
     // If user does not exist, it creates a new one from the back end and saves it to localStorage
-    socket.on('user-created', saveUser); // (id::name)
+    // (id::name)
+    socket.on('create', function(idAndName){
+        var decomposed = decompose(idAndName);
+        localStorage.setItem('name', decomposed.second);
+        localStorage.setItem('userId', decomposed.first);
+    });
 
     // Checks if user exists
-    var user = localStorage.getItem('user');
-    if(user) socket.emit('user', user);
-    else socket.emit('create-user', askForName());
+    var user = localStorage.getItem('userId');
+    if(user) socket.emit('connect', user);
+    else socket.emit('create', askForName());
 }
 
 function saveUser(name, id){
@@ -100,11 +105,6 @@ function renderUser(user, color){
 
 
 function init(){
-    // NO BORRAR
-    // table = document.createElement('DIV');
-    // table.classList.add('mod--table');
-    // body.appendChild(table);
-
     // BORRAR
     var user1 = new User("Tomas", 1);
     var user2 = new User("Julio", 2);
@@ -113,14 +113,12 @@ function init(){
     var user5 = new User("Nico V", 5);
     var user6 = new User("Mati V", 6);
 
+
+    // NO BORRAR
     var teams = [];
     teams.push(new Team([user1, user3, user5], "red"));
     teams.push(new Team([user2, user4, user6], "blue"));
-
     renderTeams(teams);
-
-    // renderUser(user1);
-    // renderUser(user2);
 
 }
 
@@ -133,4 +131,10 @@ window.onload = init;
   */
 function askForName(){
     // Hacer un popup que le pida el nombre y devolverlo
+    return "Tomas P.";
+}
+
+function decompose(text){
+    var index = text.indexOf("::");
+    return {first: text.substring(0, index), second: text.substring(index + 2, text.length)};
 }
