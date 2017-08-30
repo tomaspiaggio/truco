@@ -3,13 +3,9 @@ var body = document.querySelector('body');
 var table = body.querySelector('.mod--table');
 var red = body.querySelector('.red');
 var blue = body.querySelector('.blue');
+var messageBucket = body.querySelector('.chat__messages');
 var index = 0;
-
-socket.on('connection', function(){
-    initialization();
-    gameplay();
-    chat();
-});
+var me;
 
 // FUNCTIONS
 
@@ -17,8 +13,20 @@ socket.on('connection', function(){
 // EVENTS
 
 function chat(){
-    socket.emit('my-message', message); // Se manda mensaje a todos (id::message)
-    socket.on('incoming-message', message) ; // Llega el mensaje y se pone en el chat (id::message)
+
+    // Llega el mensaje y se pone en el chat (name::message)
+    socket.on('incoming-message', (nameAndMessage) => {
+        var decomposed = decompose(nameAndMessage);
+        renderMessage(decomposed.second, decomposed.first);
+    });
+    var input = body.querySelector('.chat__input');
+    input.addEventListener('keypress', (event) => {
+        if(event.code == "Enter" && input.value != ''){
+            renderMessage(input.value, 'Me');
+            socket.emit('my-message', me.id + "::" + input.value); // Se manda mensaje a todos (id::message)
+            input.value = '';
+        }
+    });
 }
 
 function gameplay(){
@@ -53,8 +61,13 @@ function initialization(){
 
     // Checks if user exists
     var user = localStorage.getItem('userId');
-    if(user) socket.emit('connect', user);
-    else socket.emit('create', askForName());
+    if(user != null) {
+        socket.emit('connect', user);
+        me = {id: user, name: localStorage.getItem('name')}
+    }
+    else askForName().then((data) => {
+        socket.emit('create', data);
+    });
 }
 
 function saveUser(name, id){
@@ -103,6 +116,24 @@ function renderUser(user, color){
     table.appendChild(player);
 }
 
+function renderMessage(message, user){
+    var p = document.createElement('P');
+    var name = document.createElement('SPAN');
+    var messageContainer = document.createElement('SPAN');
+
+    p.classList.add('chat__new');
+    name.classList.add('chat__name');
+    messageContainer.classList.add('chat__message');
+
+    messageContainer.textContent = message;
+    name.textContent = user + ': ';
+    p.appendChild(name);
+    p.appendChild(messageContainer);
+
+    console.log();
+    messageBucket.appendChild(p);
+}
+
 
 function init(){
     // BORRAR
@@ -120,6 +151,10 @@ function init(){
     teams.push(new Team([user2, user4, user6], "blue"));
     renderTeams(teams);
 
+    initialization();
+    // gameplay();
+    chat();
+
 }
 
 window.onload = init;
@@ -130,8 +165,17 @@ window.onload = init;
   * @return the name of the user
   */
 function askForName(){
-    // Hacer un popup que le pida el nombre y devolverlo
-    return "Tomas P.";
+    var popup = body.querySelector('.mod--popup');
+    var input = popup.querySelector('.mod__input');
+    popup.classList.add('mod--popup--visible');
+    return new Promise((resolve, reject) => {
+        input.addEventListener('keypress', (keyCode) => {
+            if(keyCode.code == "Enter" && input.value != ''){
+                popup.classList.remove('mod--popup--visible');
+                resolve(input.value);
+            }
+        });
+    });
 }
 
 function decompose(text){

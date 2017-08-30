@@ -6,6 +6,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
+var serverRoom = 'useruserroom';
 var database = require('./database.js');
 var databaseInfo = {
   host: "localhost",
@@ -36,29 +37,27 @@ app.get('/socket.js', function(req, res){
 // Socket.io
 
 io.on('connection', function(socket){
-    console.log("User connected");
-
-    // database.postUser(mysql.createConnection(databaseInfo), "Tomas P.", (data) => {
-    //
-    // });
-
-    // UNTESTED
+    // database.postUser(mysql.createConnection(databaseInfo), "Tomas P.", (data) => { do something with data });
     socket.on('create', function(name){
         console.log('User created: ' + socket.id);
-        var id;
-        database.postUser(mysql.createConnection(databaseInfo), name, (data) => id = data);
-        socket.join(id);
-        users[id] = name;
-        io.sockets.in(id).emit('create', id + '::' + name);
+        database.postUser(  mysql.createConnection(databaseInfo), name, (id) => {
+            socket.join(id);
+            users[id] = name;
+            io.sockets.in(id).emit('create', id + '::' + name);
+        });
     });
 
-
-    // UNTESTED
     socket.on('connect', function(id){
-        var user = database.getUser(id);
-        var result;
-        database.getUser(mysql.createConnection(databaseInfo), id).then((data) => result = data);
-        clients[result.id] = result.name;
+        console.log(id);
+        database.getUser(mysql.createConnection(databaseInfo), id).then((data) => {
+            clients[data.id] = data.name;
+            console.log("User connected: " + data.name);
+        });
+    });
+
+    socket.on('my-message', function(message){
+        var decomposed = decompose(message);
+        
     });
 
     // VER DE HACER LO DE LOS ROOMS QUE HICE EN EL CHAT DE SHOPIFY
@@ -119,3 +118,11 @@ io.on('connection', function(socket){
 http.listen(3000, function () {
     console.log("Listening on port: 3000")
 });
+
+
+// FUNCTIONS
+
+function decompose(text){
+    var index = text.indexOf("::");
+    return {first: text.substring(0, index), second: text.substring(index + 2, text.length)};
+}
