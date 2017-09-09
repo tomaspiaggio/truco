@@ -8,7 +8,7 @@
         });
 
         document.querySelector('.mod__create').addEventListener('click', function(){
-            // DO SOMETHING ON CREATE
+            window.location.href += 'create';
         });
     }
 

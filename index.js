@@ -48,6 +48,20 @@ app.get('/connect.css', function(req, res){
     res.sendFile(__dirname + '/public/connect/connect.css');
 });
 
+// CREATE
+app.get('/create', function(req, res){
+    res.sendFile(__dirname + '/public/create/create.html');
+});
+
+app.get('/create.js', function(req, res){
+    res.sendFile(__dirname + '/public/create/create.js');
+});
+
+app.get('/create.css', function(req, res){
+    res.sendFile(__dirname + '/public/create/create.css');
+});
+
+
 // Socket.io
 
 io.on('connection', function(socket){

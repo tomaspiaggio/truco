@@ -1,0 +1,53 @@
+body {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mod {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 660px;
+    padding: 20px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+.mod__container{
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.mod__option, .mod__game-id {
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 3px;
+    font-size: 20px;
+}
+
+.mod__option {
+    background-color: #89dcdd;
+}
+
+.mod__option.mod__create{
+    width: 100%;
+}
+
+.mod__option.mod__connect {
+    width: 70%;
+    float: left;
+}
+
+.mod__game-id {
+    width: 30%;
+    margin: 0;
+    padding: 0;
+    float: left;
+    box-sizing: border-box;
+    padding: 10px;
+}
