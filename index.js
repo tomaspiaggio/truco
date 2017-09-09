@@ -19,19 +19,33 @@ var users = [];
 
 // App Starts Here
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/public/index.html');
+    if(req.query.id != null){
+        res.sendFile(__dirname + '/public/index/index.html');
+    } else {
+        res.sendFile(__dirname + '/public/connect/connect.html');
+    }
 });
 
+// INDEX
 app.get('/objects.js', function(req, res){
-    res.sendFile(__dirname + '/public/objects.js');
+    res.sendFile(__dirname + '/public/index/objects.js');
 });
 
 app.get('/index.css', function(req, res){
-    res.sendFile(__dirname + '/public/index.css');
+    res.sendFile(__dirname + '/public/index/index.css');
 });
 
 app.get('/socket.js', function(req, res){
-    res.sendFile(__dirname + '/public/socket.js');
+    res.sendFile(__dirname + '/public/index/socket.js');
+});
+
+// CONNECT
+app.get('/connect.js', function(req, res){
+    res.sendFile(__dirname + '/public/connect/connect.js');
+});
+
+app.get('/connect.css', function(req, res){
+    res.sendFile(__dirname + '/public/connect/connect.css');
 });
 
 // Socket.io
@@ -57,9 +71,9 @@ io.on('connection', function(socket){
 
     socket.on('my-message', function(message){
         var decomposed = decompose(message);
-        database.getAllUsersFromGame(mysql.createConnection(databaseInfo), /*GAME ID*/, () => {
-            socket.emit('incoming-message', message); //emitir a todos el mensaje y ver lo de los rooms
-        });
+        // database.getAllUsersFromGame(mysql.createConnection(databaseInfo), /*GAME ID*/, () => {
+        //     socket.emit('incoming-message', message); //emitir a todos el mensaje y ver lo de los rooms
+        // });
     });
 
     // VER DE HACER LO DE LOS ROOMS QUE HICE EN EL CHAT DE SHOPIFY
