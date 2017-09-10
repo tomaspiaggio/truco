@@ -1,5 +1,7 @@
 body {
     background-color: rgba(0, 0, 0, 0.5);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
 }
 
 .mod {
@@ -21,7 +23,7 @@ body {
     margin-bottom: 20px;
 }
 
-.mod__option, .mod__game-id {
+.mod__submit, .mod__input {
     height: 50px;
     margin: 0;
     padding: 0;
@@ -30,24 +32,34 @@ body {
     font-size: 20px;
 }
 
-.mod__option {
+.mod__submit {
     background-color: #89dcdd;
-}
-
-.mod__option.mod__create{
-    width: 100%;
-}
-
-.mod__option.mod__connect {
-    width: 70%;
+    width: 30%;
     float: left;
 }
 
-.mod__game-id {
-    width: 30%;
+.mod__input {
+    width: 70%;
     margin: 0;
     padding: 0;
     float: left;
     box-sizing: border-box;
     padding: 10px;
+}
+
+.mod__request-name{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s;
+}
+
+.mod__request-name--active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
+}
+
+.mod__player {
+    font-size: 35px;
 }

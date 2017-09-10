@@ -61,6 +61,13 @@ app.get('/create.css', function(req, res){
     res.sendFile(__dirname + '/public/create/create.css');
 });
 
+// NEW GAME
+// TODO: HACER EL DATABSE.NEWGAME QUE DEVUELVA EL ID DEL JUEGO PARA QUE PUEDA SER COMPARTIDO
+app.get('/newgame', function(req, res){
+    database.newGame();
+    res.send();
+});
+
 
 // Socket.io
 
